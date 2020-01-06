@@ -1,4 +1,73 @@
-default .aws/config ( source profile credentials )
-profile that is end of the line destination profile credentials
+1) Source Account
+
+####Source bucket policy;
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::SOURCE_BUCKET_NAME",
+                "arn:aws:s3:::SOURCE_BUCKET_NAME/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::DESTINATION_BUCKET_NAME",
+                "arn:aws:s3:::DESTINATION_BUCKET_NAME/*"
+            ]
+        }
+    ]
+}
+
+2) Destination Account
+
+###Destination iam policy for profile that you'll use the credentials
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::SOURCE_BUCKET_NAME",
+                "arn:aws:s3:::SOURCE_BUCKET_NAME/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::DESTINATION_BUCKET_NAME",
+                "arn:aws:s3:::DESTINATION_BUCKET_NAME/*"
+            ]
+        }
+    ]
+}
+
+
+
+3) Command line 
+###default .aws/config ( source profile credentials )
+###profile that is end of the line destination profile credentials
 
 aws s3 sync s3://source-name-s3bucket s3://destination-name-s3bucket --source-region eu-west-1 --region eu-west-1 --profile profile-name
