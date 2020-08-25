@@ -1,0 +1,53 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowListBucketIfSpecificPrefixIsIncludedInRequest",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::test-files"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "data_science/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "AllowUserToReadObjectDataInDataScienceFolder",
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::test-files/data_science/*"
+            ]
+        },
+        {
+            "Sid": "ExplicitlyDenyAnyRequestsForAllOtherFoldersExceptDataScience",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Deny",
+            "Resource": [
+                "arn:aws:s3:::test-files"
+            ],
+            "Condition": {
+                "StringNotLike": {
+                    "s3:prefix": [
+                        "data_science/*",
+                        ""
+                    ]
+                },
+                "Null": {
+                    "s3:prefix": false
+                }
+            }
+        }
+    ]
+}
